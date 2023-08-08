@@ -8,6 +8,8 @@ public class gitTest {
 		
 		
 		System.out.println("추가 된 라인");
+
+		// hello
 	}
 
 }
