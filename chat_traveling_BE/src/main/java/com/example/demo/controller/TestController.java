@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,13 +13,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 public class TestController {
 	
 	@PostMapping("/hello133333")
-	public String main11() throws JsonProcessingException { 
+	public String main11(HttpServletRequest request) throws JsonProcessingException { 
+		HttpSession session = request.getSession();
+		System.out.println(session.getAttribute("id"));
+		session.setAttribute("id", "yjlee"); 
 		System.out.println("hello11");
-		ObjectMapper objectMapper = new ObjectMapper();
+		ObjectMapper objectMapper = new ObjectMapper(); 
 		List<Map<String,Object>> mList = new ArrayList<Map<String,Object>>();
 		Map<String,Object> mMap = new HashMap<String,Object>();
 		mMap.put("sendChat","안녕하세요");
