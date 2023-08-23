@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,18 +21,16 @@ import jakarta.servlet.http.HttpSession;
 public class TestController {
 	
 	@PostMapping("/hello133333")
-	public String main11(HttpServletRequest request) throws JsonProcessingException { 
+	public String main11(HttpServletRequest request, @RequestBody Map<String,Object> jsonData) throws JsonProcessingException { 
 		HttpSession session = request.getSession();
 		System.out.println(session.getAttribute("id"));
 		session.setAttribute("id", "yjlee"); 
 		System.out.println("hello11");
 		ObjectMapper objectMapper = new ObjectMapper(); 
 		List<Map<String,Object>> mList = new ArrayList<Map<String,Object>>();
-		Map<String,Object> mMap = new HashMap<String,Object>();
-		mMap.put("sendChat","안녕하세요");
-		mMap.put("receiveChat","반갑습니다");
-		mList.add(mMap);
-		return objectMapper.writeValueAsString(mList);
+		jsonData.put("chatAsw","반갑습니다");
+		mList.add(jsonData);
+		return objectMapper.writeValueAsString(jsonData);
 	}
 	@GetMapping("/hello123")
 	public String main1() {  
