@@ -25,10 +25,20 @@ public class TestController {
 		HttpSession session = request.getSession();
 		UserSession userSession = new UserSession();
 		userSession.setUserId("yjlee");
-		session.setAttribute("session", userSession); 
 		Map<String,Object> pageSession = new HashMap<String,Object>();
-		pageSession.put("pageSession", "Y");
+		if(session.getAttribute("session") == null) {
+			pageSession.put("pageSession", "Y");
+			session.setAttribute("session", userSession);
+		}else {
+			pageSession.put("pageSession", "D");
+		}
 		return (new ObjectMapper()).writeValueAsString(pageSession);
+	}
+	
+	@PostMapping("/logout")
+	public void logout(HttpServletRequest request) throws JsonProcessingException {
+		HttpSession session = request.getSession();
+		session.removeAttribute("session"); 
 	}
 	
 	@PutMapping("/hello133333")
