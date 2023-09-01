@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.session.UserSession;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -19,21 +20,19 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 public class TestController {
-	@PostMapping("login")
-	public String login(HttpSession session) throws JsonProcessingException {
-		session.setAttribute("id", "yjlee"); 
+	@PostMapping("/login")
+	public String login(HttpServletRequest request) throws JsonProcessingException {
+		HttpSession session = request.getSession();
+		UserSession userSession = new UserSession();
+		userSession.setUserId("yjlee");
+		session.setAttribute("session", userSession); 
 		Map<String,Object> pageSession = new HashMap<String,Object>();
 		pageSession.put("pageSession", "Y");
 		return (new ObjectMapper()).writeValueAsString(pageSession);
 	}
 	
 	@PutMapping("/hello133333")
-	public String main11(HttpServletRequest request, @RequestBody Map<String,Object> jsonData) throws JsonProcessingException { 
-		HttpSession session = request.getSession();
-		String id = (String) session.getAttribute("id");
-		if(id == null || id.isEmpty()) { 
-			return "";
-		}
+	public String main11(@RequestBody Map<String,Object> jsonData) throws JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper(); 
 		List<Map<String,Object>> mList = new ArrayList<Map<String,Object>>();
 		jsonData.put("chatAsw","반갑습니다");
