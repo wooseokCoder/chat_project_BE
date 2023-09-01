@@ -53,6 +53,7 @@ public class ChatInterceptor implements HandlerInterceptor {
 					throw new TokenCheckException("정상적인 요청 토큰이 아닙니다.");
 				}
 			}
+			// 정상적인 요청일 경우 csrfToken세팅
 			synchronized(response) {
 				String sToken = UUID.randomUUID().toString(); 
 				request.getSession().setAttribute("csrfToken", sToken);
