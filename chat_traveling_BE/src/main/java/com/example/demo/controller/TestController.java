@@ -38,7 +38,8 @@ public class TestController {
 	@PostMapping("/logout")
 	public void logout(HttpServletRequest request) throws JsonProcessingException {
 		HttpSession session = request.getSession();
-		session.removeAttribute("session"); 
+		session.removeAttribute("session");
+		session.removeAttribute("csrfToken");
 	}
 	
 	@PutMapping("/hello133333")

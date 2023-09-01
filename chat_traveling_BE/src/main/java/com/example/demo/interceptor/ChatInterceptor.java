@@ -37,20 +37,23 @@ public class ChatInterceptor implements HandlerInterceptor {
 					Map<String,Object> mResult = new HashMap<String,Object>();
 					mResult.put("errMsg","세션이 없습니다."); 
 					mResult.put("exceptionClass","SessionCheckException");
-					response.setContentType("text/html; charset=utf-8");
-			        response.getWriter().write(objectMapper.writeValueAsString(mResult));
+					response.setContentType("application/json; charset=utf-8");
+			        response.getWriter().print(objectMapper.writeValueAsString(mResult));
 			        response.setStatus(500);
-					throw new SessionCheckException("세션이 없습니다.");
+					new SessionCheckException("세션이 없습니다.").printStackTrace();
+			        return false;
 				}
 				if(!session.getAttribute("csrfToken").equals(request.getHeader("csrfToken"))) {
 					ObjectMapper objectMapper = new ObjectMapper(); 
 					Map<String,Object> mResult = new HashMap<String,Object>();
 					mResult.put("errMsg","정상적인 요청 토큰이 아닙니다.");
 					mResult.put("exceptionClass","TokenCheckException");
-					response.setContentType("text/html; charset=utf-8");
-			        response.getWriter().write(objectMapper.writeValueAsString(mResult));
+					response.setContentType("application/json; charset=utf-8");
+			        response.getWriter().print(objectMapper.writeValueAsString(mResult));
 					response.setStatus(500);
-					throw new TokenCheckException("정상적인 요청 토큰이 아닙니다.");
+					new TokenCheckException("정상적인 요청 토큰이 아닙니다.").printStackTrace();
+					return false;
+					
 				}
 			}
 			// 정상적인 요청일 경우 csrfToken세팅
