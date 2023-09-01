@@ -21,10 +21,10 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 public class TestController {
 	@PostMapping("/login")
-	public String login(HttpServletRequest request) throws JsonProcessingException {
+	public String login(HttpServletRequest request, @RequestBody Map<String,Object> pmParam) throws JsonProcessingException {
 		HttpSession session = request.getSession();
 		UserSession userSession = new UserSession();
-		userSession.setUserId("yjlee");
+		userSession.setUserId((String)pmParam.get("userId"));
 		Map<String,Object> pageSession = new HashMap<String,Object>();
 		if(session.getAttribute("session") == null) {
 			pageSession.put("pageSession", "Y");
