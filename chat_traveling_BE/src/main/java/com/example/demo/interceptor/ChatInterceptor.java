@@ -1,9 +1,7 @@
 package com.example.demo.interceptor;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -12,6 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import com.example.demo.exception.SessionCheckException;
 import com.example.demo.exception.TokenCheckException;
 import com.example.demo.session.UserSession;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.ServletException;
@@ -32,28 +31,16 @@ public class ChatInterceptor implements HandlerInterceptor {
 		// 본 요청은 put, post, delete이다.(OPTIONS과 본 요청이 두개가 동시에 들어온다)
 		if(!sHttpMethod.equals("OPTIONS") && !sHttpMethod.equals("GET")) {
 			if(!sRequestPath.startsWith("/login") && !sRequestPath.startsWith("/error")) {
+				Exception exception = null;
 				if(userSession == null || userSession.getUserId() == null){
-					ObjectMapper objectMapper = new ObjectMapper(); 
-					Map<String,Object> mResult = new HashMap<String,Object>();
-					mResult.put("errMsg","세션이 없습니다."); 
-					mResult.put("exceptionClass","SessionCheckException");
-					response.setContentType("application/json; charset=utf-8");
-			        response.getWriter().print(objectMapper.writeValueAsString(mResult));
-			        response.setStatus(500);
-					new SessionCheckException("세션이 없습니다.").printStackTrace();
-			        return false;
+					exception = new SessionCheckException("세션이 없습니다.");
 				}
 				if(!session.getAttribute("csrfToken").equals(request.getHeader("csrfToken"))) {
-					ObjectMapper objectMapper = new ObjectMapper(); 
-					Map<String,Object> mResult = new HashMap<String,Object>();
-					mResult.put("errMsg","정상적인 요청 토큰이 아닙니다.");
-					mResult.put("exceptionClass","TokenCheckException");
-					response.setContentType("application/json; charset=utf-8");
-			        response.getWriter().print(objectMapper.writeValueAsString(mResult));
-					response.setStatus(500);
-					new TokenCheckException("정상적인 요청 토큰이 아닙니다.").printStackTrace();
+					exception = new TokenCheckException("정상적인 요청 토큰이 아닙니다.");
+				}
+				if(exception != null) {
+					setResponseErrorResult(response,exception);
 					return false;
-					
 				}
 			}
 			// 정상적인 요청일 경우 csrfToken세팅
@@ -64,6 +51,18 @@ public class ChatInterceptor implements HandlerInterceptor {
 			}
 		}
 		return true;
+	}
+	
+	private HttpServletResponse setResponseErrorResult(HttpServletResponse response,Exception exception) throws JsonProcessingException, IOException {
+		ObjectMapper objectMapper = new ObjectMapper(); 
+		Map<String,Object> mResult = new HashMap<String,Object>();
+		mResult.put("errMsg",exception.getMessage());
+		mResult.put("exceptionClass",exception.getClass().getSimpleName());
+		response.setContentType("application/json; charset=utf-8");
+        response.getWriter().print(objectMapper.writeValueAsString(mResult));
+		response.setStatus(500);
+		exception.printStackTrace();
+		return response;
 	}
 
 }
