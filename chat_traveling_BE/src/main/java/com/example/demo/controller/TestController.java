@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.session.UserSession;
-import com.example.entity.Member;
+//import com.example.entity.Member;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -27,8 +27,8 @@ public class TestController {
 		UserSession userSession = new UserSession();
 		userSession.setUserId((String)pmParam.get("userId"));
 		
-		Member member = Member.builder()
-							.userId((String)pmParam.get("userId"));
+		//Member member = Member.builder()
+		//					.userId((String)pmParam.get("userId"));
 		
 		Map<String,Object> pageSession = new HashMap<String,Object>();
 		if(session.getAttribute("session") == null) {
