@@ -1,0 +1,19 @@
+spring:
+ ## JPA Setting Info
+ jpa:
+  hibernate:
+    ddl-auto: create # option type: create, create drop, update, validate, none
+  properties:
+    hibernate:
+      diarect: org.hibernate.dialect.H2Dialect #쿼리의 기준이 되는 데이터베이스 엔진 설정
+      "[show_sql]": true # sql 쿼리를 보여줌
+      "[format_sql]": true # sql query formatting
+      "[use_sql_comments]": true #쿼리의 추가정보를 보여줌
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace  #query의 ?에 어떤 값이 들어가는지 추적할 수 있는 설정
