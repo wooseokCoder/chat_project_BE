@@ -35,7 +35,7 @@ public class ChatInterceptor implements HandlerInterceptor {
 				if(userSession == null || userSession.getUserId() == null){
 					exception = new SessionCheckException("세션이 없습니다.");
 				}
-				if(!session.getAttribute("csrfToken").equals(request.getHeader("csrfToken"))) {
+				else if(!session.getAttribute("csrfToken").equals(request.getHeader("csrfToken"))) {
 					exception = new TokenCheckException("정상적인 요청 토큰이 아닙니다.");
 				}
 				if(exception != null) {
